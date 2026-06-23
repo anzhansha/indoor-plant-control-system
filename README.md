@@ -1,5 +1,9 @@
 # Advanced Control System Design for Indoor Plant Growth
 
+## Authors
+
+Zhansha Ansagan, Assem Serikova, and [Mussa Bolatbay](https://github.com/BulMussa).
+
 ## Overview
 
 This repository documents a model-based soil-moisture control project for indoor lettuce cultivation. The main contribution is the identification and control workflow: preprocessing sensor data, constructing a persistently excited dataset, comparing candidate models in MATLAB, selecting a state-space model, and evaluating a constrained LQR/Kalman controller.

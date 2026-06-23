@@ -2,20 +2,15 @@
 
 ## Overview
 
-This project develops a model-based soil-moisture control system for indoor lettuce cultivation. The work combines sensor-data collection, computational persistent excitation, MATLAB system identification, discrete LQR with integral action, Kalman state estimation, and practical irrigation constraints.
+This repository documents a model-based soil-moisture control project for indoor lettuce cultivation. The main contribution is the identification and control workflow: preprocessing sensor data, constructing a persistently excited dataset, comparing candidate models in MATLAB, selecting a state-space model, and evaluating a constrained LQR/Kalman controller.
 
-The ESP32-S3 was used as a sensing and communication node for soil moisture, valve state, air temperature, and humidity. The main technical work was performed in MATLAB: preparing the identification data, comparing candidate dynamic models, selecting a state-space realization, and evaluating the constrained controller. A Python translation was later tested on a Raspberry Pi prototype.
+ESP32-S3 was used as a sensing and communication node for the baseline data collection. The Raspberry Pi/Python work is kept as a prototype layer, while the main technical focus remains MATLAB identification, control design, and simulation.
 
 ## Data collection and persistent excitation
 
-Baseline measurements were recorded at 10-minute intervals:
+Baseline measurements were recorded at 10-minute intervals for soil moisture, irrigation valve state, air temperature, and relative humidity.
 
-- soil moisture;
-- irrigation valve state;
-- air temperature;
-- relative humidity.
-
-An order-9 maximum-length PRBS was used to construct a richer excitation signal. The binary sequence contains 511 samples before repeating. A slow chirp was added to broaden the excited frequency range:
+An order-9 maximum-length PRBS was used to construct the excitation signal. The binary sequence contains 511 samples before repeating, and a slow chirp was added to broaden the frequency content:
 
 $$
 u[k] = u_{\mathrm{PRBS}}[k] + u_{\mathrm{chirp}}[k].
@@ -32,7 +27,7 @@ y[k] = a_1y[k-1] + a_2y[k-2]
      + b_wu[k-1] + b_TT[k-1] + b_HH[k-1] + c + e[k].
 $$
 
-The final identification dataset contains **4,320 samples over 30 days** with a sampling interval of **600 seconds**. Temperature and humidity originate from the baseline measurements. The signed `water_input` and the resulting `soil_moisture_sim` series were generated computationally; negative excitation values do not represent physical negative irrigation.
+The final identification dataset contains **4,320 samples over 30 days** with a sampling interval of **600 seconds**. Temperature and humidity come from the baseline measurements. The signed `water_input` and the resulting `soil_moisture_sim` series were generated computationally; negative excitation values do not represent physical negative irrigation.
 
 ## System identification
 
@@ -59,7 +54,7 @@ The processed data were divided chronologically into estimation and validation s
 
 *Figure 3. Residual autocorrelation and input-residual cross-correlation with confidence bounds.*
 
-ARX achieved the highest reported validation fit. The three-state N4SID model was retained for controller synthesis because its state-space representation supports LQR feedback and Kalman estimation directly.
+ARX achieved the highest reported validation fit. The three-state N4SID model was retained for controller synthesis because it supports LQR feedback and Kalman estimation directly.
 
 The selected realization was reported as
 
@@ -100,7 +95,7 @@ $$
 with
 
 $$
-Q_x = \operatorname{diag}(10,1,1),\qquad q_w=0.05,\qquad R=200.
+Q_x = \mathrm{diag}(10,1,1),\qquad q_w=0.05,\qquad R=200.
 $$
 
 The resulting control law is
@@ -156,42 +151,11 @@ The 35-day closed-loop simulation combines the controller and estimator with sup
 
 *Figure 7. Unconstrained LQR-integral command before saturation and budget logic.*
 
-The historical run reported an integral absolute error of approximately $6.45\times10^5$ moisture·s and total simulated water use of approximately 2.73 L. These values are simulation outputs and depend on the pump-flow conversion used by the historical model.
+The historical run reported an integral absolute error of approximately $6.45\times10^5$ moisture*s and total simulated water use of approximately 2.73 L. These values are simulation outputs and depend on the pump-flow conversion used by the historical model.
 
 ## Hardware prototype
 
-The experimental platform combined an ESP32-S3 sensing node, capacitive soil-moisture probe, temperature/humidity sensor, relay-driven irrigation pump, and Raspberry Pi 5.
-
-![Hardware stack](results/figures/hw_stack_photo_s.png)
-
-*Figure 8. Conceptual data and actuation path used for the hardware prototype.*
-
-![Prototype controller flowchart](results/figures/block_diagram_hw.png)
-
-*Figure 9. Early hardware-control flowchart. The threshold labels belong to the prototype stage; the final MATLAB study uses the five-week 20–30% set-point schedule.*
-
-<p align="center">
-  <img src="results/figures/field_photo1.png" width="38%" alt="Indoor lettuce setup overview">
-  <img src="results/figures/field_photo2.png" width="59%" alt="Indoor lettuce setup electronics">
-</p>
-
-*Figure 10. Indoor lettuce setup with sensing electronics, Raspberry Pi, relay, and irrigation hardware.*
-
-The MATLAB LQR/Kalman design was translated to Python for the Raspberry Pi prototype. The following archived screenshots show the gain design and the main estimation/control loop:
-
-<p align="center">
-  <img src="results/figures/designlqr.png" width="49%" alt="Python LQR and Kalman design excerpt">
-  <img src="results/figures/controlloop.png" width="49%" alt="Python controller loop excerpt">
-</p>
-
-*Figure 11. Python excerpts for LQR/Kalman design and the Raspberry Pi control loop.*
-
-<p align="center">
-  <img src="results/figures/control_logs_snippet1.png" width="47%" alt="Controller log excerpt">
-  <img src="results/figures/control_logs_snippet2.png" width="47%" alt="Sensor log excerpt">
-</p>
-
-*Figure 12. Archived controller and sensor log snapshots from Raspberry Pi testing.*
+Hardware details live in [hardware/README.md](hardware/README.md). The experimental platform used ESP32-S3 sensing/communication, a Raspberry Pi prototype, a capacitive soil-moisture probe, temperature/humidity sensing, and relay-driven irrigation. Hardware is supporting evidence; the main emphasis stays on preprocessing, identification, model selection, controller design, and simulation.
 
 ## Repository contents
 
@@ -205,21 +169,20 @@ matlab/04_simulation/            Constrained LQR/Kalman simulation
 results/models/                  MATLAB model artifacts
 results/figures/                 Project and result figures
 docs/                            Methodology and technical limitations
-hardware/                        Hardware scope
+hardware/                        Hardware scope and prototype notes
 ```
 
 ## Conclusions
 
-- Model-assisted persistent excitation enabled systematic comparison of several dynamic model structures.
-- ARX and three-state N4SID models achieved approximately 90% validation fit on the generated identification dataset.
-- N4SID provided a state-space representation suitable for LQR and Kalman-filter design.
-- The simulation integrates model-based feedback with saturation, hysteresis, and water-budget constraints.
-- The hardware platform supported physical baseline data collection and Raspberry Pi controller prototyping.
+- Persistent excitation made model comparison reproducible.
+- ARX and three-state N4SID reached about 90% validation fit on the generated dataset.
+- N4SID provided a state-space model suitable for LQR and Kalman design.
+- The simulation includes saturation, hysteresis, and water-budget limits.
+- Hardware is documented separately and treated as supporting evidence.
 
 ## References
 
 1. P. Van Overschee and B. De Moor, *Subspace Identification for Linear Systems*, Kluwer, 1996.
 2. L. Ljung, *System Identification: Theory for the User*, 2nd ed., Prentice Hall, 1999.
 3. K. Ogata, *Modern Control Engineering*, 5th ed., Prentice Hall, 2010.
-4. E. J. van Henten, “Validation of a dynamic lettuce growth model for greenhouse climate control,” *Agricultural Systems*, 45, 55–72, 1994.
-
+4. E. J. van Henten, "Validation of a dynamic lettuce growth model for greenhouse climate control", *Agricultural Systems*, 45, 55-72, 1994.

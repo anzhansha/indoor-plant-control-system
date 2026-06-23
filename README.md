@@ -112,19 +112,13 @@ $$
 
 A steady-state Kalman filter reconstructs the internal state from the soil-moisture output:
 
-$$
-\widehat{x}[k+1] = A\widehat{x}[k] + Bu[k]
-+ L\left(y[k]-C\widehat{x}[k]\right),
-$$
+$$\widehat{x}[k+1] = A\widehat{x}[k] + B u[k] + L\left(y[k] - C\widehat{x}[k]\right)$$
 
 using
 
-$$
-Q_k = 10^{-6}I_3,\qquad R_k = 10^{-4}.
-$$
+$$Q_k = 10^{-6} I_3,\qquad R_k = 10^{-4}$$
 
-The N4SID states are internal realization coordinates. Soil moisture is represented by the model output $y=Cx$, not by a single state coordinate.
-
+The N4SID states are internal realization coordinates. Soil moisture is represented by the model output $y = Cx$, not by a single state coordinate.
 ## Constrained irrigation simulation
 
 The 35-day closed-loop simulation combines the controller and estimator with supervisory irrigation logic:

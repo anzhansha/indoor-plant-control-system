@@ -1,0 +1,45 @@
+# MATLAB autosave and generated content
+*.asv
+*.m~
+*.autosave
+*.slx.r*
+*.mdl.r*
+*.slxc
+slprj/
+sccprj/
+codegen/
+helpsearch/
+.buildtool/
+.MATLABDriveTag
+
+# MATLAB workspace and local generated results
+*.p
+myFullWorkspace.mat
+results/tables/*.csv
+results/figures/*.png
+results/figures/*.pdf
+
+# Keep documentation placeholders
+!results/figures/README.md
+!results/tables/README.md
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Private/raw measurement exports
+data/raw/*
+!data/raw/README.md
+*.env
+.env*
+

@@ -2,7 +2,7 @@
 
 ## Authors
 
-Zhansha Ansagan, Assem Serikova, and [Mussa Bolatbay](https://github.com/BulMussa).
+Zhansha Ansagan, [Mussa Bolatbay](https://github.com/BulMussa), and Assem Serikova.
 
 ## Overview
 

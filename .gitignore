@@ -12,15 +12,12 @@ helpsearch/
 .buildtool/
 .MATLABDriveTag
 
-# MATLAB workspace and local generated results
+# MATLAB workspace and local generated tables
 *.p
 myFullWorkspace.mat
 results/tables/*.csv
-results/figures/*.png
-results/figures/*.pdf
 
 # Keep documentation placeholders
-!results/figures/README.md
 !results/tables/README.md
 
 # Python
@@ -42,4 +39,10 @@ data/raw/*
 !data/raw/README.md
 *.env
 .env*
+
+# Local image import/drop folder; curated copies live in results/figures/
+/images/
+
+# Private project reconstruction notes
+/.project-context.md
 

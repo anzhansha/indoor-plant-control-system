@@ -1,16 +1,16 @@
-# Advanced Control System Design for Indoor Plant Growth
+## Advanced Control System Design for Indoor Plant Growth
 
-## Authors
+### Authors
 
 Zhansha Ansagan, [Mussa Bolatbay](https://github.com/BulMussa), and Assem Serikova.
 
-## Overview
+### Overview
 
 This repository documents a model-based soil-moisture control project for indoor lettuce cultivation. The main contribution is the identification and control workflow: preprocessing sensor data, constructing a persistently excited dataset, comparing candidate models in MATLAB, selecting a state-space model, and evaluating a constrained LQR/Kalman controller.
 
 ESP32-S3 was used as a sensing and communication node for the baseline data collection. The Raspberry Pi/Python work is kept as a prototype layer, while the main technical focus remains MATLAB identification, control design, and simulation.
 
-## Data collection and persistent excitation
+### Data collection and persistent excitation
 
 Baseline measurements were recorded at 10-minute intervals for soil moisture, irrigation valve state, air temperature, and relative humidity.
 
@@ -35,7 +35,7 @@ $$
 
 The final identification dataset contains **4,320 samples over 30 days** with a sampling interval of **600 seconds**. Temperature and humidity come from the baseline measurements. The signed `water_input` and the resulting `soil_moisture_sim` series were generated computationally; negative excitation values do not represent physical negative irrigation.
 
-## System identification
+### System identification
 
 The processed data were divided chronologically into estimation and validation subsets. Candidate structures included ARX, ARMAX, Output Error, Box-Jenkins, first-order transfer-function, nonlinear Hammerstein-Wiener, and N4SID state-space models.
 
@@ -83,7 +83,7 @@ $$
 C = \begin{bmatrix}0.0185 & 0.0171 & 0.0164\end{bmatrix}.
 $$
 
-## LQR with integral action
+### LQR with integral action
 
 The discrete plant was augmented with an integral tracking state:
 
@@ -112,7 +112,7 @@ $$
 u_{\mathrm{raw}}[k] = -K_x\widehat{x}[k] - K_iw[k] + N_br[k].
 $$
 
-## Kalman state estimation
+### Kalman state estimation
 
 A steady-state Kalman filter reconstructs the internal state from the soil-moisture output:
 
@@ -123,7 +123,7 @@ using
 $$Q_k = 10^{-6} I_3,\qquad R_k = 10^{-4}$$
 
 The N4SID states are internal realization coordinates. Soil moisture is represented by the model output $y = Cx$, not by a single state coordinate.
-## Constrained irrigation simulation
+### Constrained irrigation simulation
 
 The 35-day closed-loop simulation combines the controller and estimator with supervisory irrigation logic:
 
@@ -161,11 +161,11 @@ The 35-day closed-loop simulation combines the controller and estimator with sup
 
 The historical run reported an integral absolute error of approximately $6.45\times10^5$ moisture*s and total simulated water use of approximately 2.73 L. These values are simulation outputs and depend on the pump-flow conversion used by the historical model.
 
-## Hardware prototype
+### Hardware prototype
 
 Hardware details live in [hardware/README.md](hardware/README.md). The experimental platform used ESP32-S3 sensing/communication, a Raspberry Pi prototype, a capacitive soil-moisture probe, temperature/humidity sensing, and relay-driven irrigation. Hardware is supporting evidence; the main emphasis stays on preprocessing, identification, model selection, controller design, and simulation.
 
-## Repository contents
+### Repository contents
 
 ```text
 data/processed/                  Identification datasets
@@ -180,7 +180,7 @@ docs/                            Methodology and technical limitations
 hardware/                        Hardware scope and prototype notes
 ```
 
-## Conclusions
+### Conclusions
 
 - Persistent excitation made model comparison reproducible.
 - ARX and three-state N4SID reached about 90% validation fit on the generated dataset.
@@ -188,7 +188,7 @@ hardware/                        Hardware scope and prototype notes
 - The simulation includes saturation, hysteresis, and water-budget limits.
 - Hardware is documented separately and treated as supporting evidence.
 
-## References
+### References
 
 1. P. Van Overschee and B. De Moor, *Subspace Identification for Linear Systems*, Kluwer, 1996.
 2. L. Ljung, *System Identification: Theory for the User*, 2nd ed., Prentice Hall, 1999.

@@ -16,7 +16,9 @@ $$
 u[k] = u_{\mathrm{PRBS}}[k] + u_{\mathrm{chirp}}[k].
 $$
 
-![24-hour PRBS valve signal](results/figures/24h_PRBS_valve_signal.png)
+<p align="center">
+  <img src="results/figures/24h_PRBS_valve_signal.png" width="68%" alt="24-hour PRBS valve signal">
+</p>
 
 *Figure 1. Initial 24-hour binary PRBS valve schedule at 10-minute resolution.*
 
@@ -44,13 +46,15 @@ The processed data were divided chronologically into estimation and validation s
 | BJ(2,2,2,2) | 68.0% | 0.1013 | 0.1002 | Validation degradation |
 
 <p align="center">
-  <img src="results/figures/arx_fit.png" width="49%" alt="ARX validation fit">
-  <img src="results/figures/ss_fit.png" width="49%" alt="N4SID validation fit">
+  <img src="results/figures/arx_fit.png" width="42%" alt="ARX validation fit">
+  <img src="results/figures/ss_fit.png" width="42%" alt="N4SID validation fit">
 </p>
 
 *Figure 2. ARX(4,4,1) and three-state N4SID validation comparisons. The archived plots report fits of approximately 90%.*
 
-![ARX residual diagnostics](results/figures/arx441_resid.png)
+<p align="center">
+  <img src="results/figures/arx441_resid.png" width="72%" alt="ARX residual diagnostics">
+</p>
 
 *Figure 3. Residual autocorrelation and input-residual cross-correlation with confidence bounds.*
 
@@ -132,22 +136,28 @@ The 35-day closed-loop simulation combines the controller and estimator with sup
 - integrator handling around active constraints;
 - pump-duty and daily-volume accounting.
 
-![Moisture response and set point](results/figures/try47_moisture_plot.png)
+<p align="center">
+  <img src="results/figures/try47_moisture_plot.png" width="74%" alt="Moisture response and set point">
+</p>
 
 *Figure 4. Simulated moisture response under the five-week piecewise set-point schedule. Irrigation is applied as daily pulses constrained by the weekly budget.*
 
-![True and estimated state](results/figures/x1_est_vs_true.png)
+<p align="center">
+  <img src="results/figures/x1_est_vs_true.png" width="74%" alt="True and estimated state">
+</p>
 
 *Figure 5. First internal state coordinate and its steady-state Kalman estimate.*
 
 <p align="center">
-  <img src="results/figures/daily_water.png" width="46%" alt="Daily water and pump on-time">
-  <img src="results/figures/pump_durations.png" width="52%" alt="Pump cycles per day">
+  <img src="results/figures/daily_water.png" width="40%" alt="Daily water and pump on-time">
+  <img src="results/figures/pump_durations.png" width="46%" alt="Pump cycles per day">
 </p>
 
 *Figure 6. Daily simulated water allocation, pump ON time, and one scheduled pump cycle per day.*
 
-![Raw LQR integral control signal](results/figures/raw_u.png)
+<p align="center">
+  <img src="results/figures/raw_u.png" width="72%" alt="Raw LQR integral control signal">
+</p>
 
 *Figure 7. Unconstrained LQR-integral command before saturation and budget logic.*
 
